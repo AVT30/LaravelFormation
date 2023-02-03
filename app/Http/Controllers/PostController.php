@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Image;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -92,6 +93,9 @@ class PostController extends Controller
     //pour récuperer par exemple un formulaire, on mets dans les paramètres request etc
     public function store(Request $request)
     {   
+
+
+
         //permet de insérer les données qu'on à mis dan le formulaire dans la bdd
             // $post = new Post();
     
@@ -99,15 +103,39 @@ class PostController extends Controller
             // $post->content = $request->content;
             // $post->save();
 
+
+        //on mets de required sur les champs qui ne peuvent pas être nul
+            $request->validate([
+                                                    //unique verifie si la valeur n'existe pas dans la db
+                'title' => ['required', 'min:5', 'max:255', 'unique:posts'],
+                'content' => ['required']
+            ]);
+
+            
+            //pour le fourmulaire si on veut ajouter une image pour un post
+
+            $filename = time().'.'.$request->avatar->extension();
+
+            $path = $request->file('avatar')->storeAs(
+                'avatars',
+                $filename,
+                'public'
+            );
+
         //autre manière de faire il faut aller dans le model 
-            Post::create
+            $post = Post::create
             ([
                 'title'=> $request->title,
                 'content'=> $request->content
             ]);
 
-            //si on veut update les valeurs 
-            
+            //afficher les images
+            $image = new Image();
+            $image->path = $path;
+
+            $post->image()->save($image);
+             
+
     }
 
 }

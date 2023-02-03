@@ -18,6 +18,7 @@ use App\Http\Controllers\PostController;
 //route::get('/', Classe crée dans le controllers::class, 'nom de la fonction qui est dans la classe'))
 
 Route::get('articles', [PostController::class, 'index'])->name('welcome');
+
 //mettre avant post/{id} car sinon il croit qu'on cherche une id dont la valeur est create
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
 Route::post('/posts/create', [PostController::class, 'store'])->name('posts.store');

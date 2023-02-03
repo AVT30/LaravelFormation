@@ -8,7 +8,10 @@
     <!-- pour retourner un article en particulier avec son id -->
     <h1>{{ $post->content }}</h1>
 
-    <span>{{ $post->image ? $post->image->path : "pas d'image" }}</span>
+    <!-- pour l'exemple de l'image aller sur le controller et sto -->
+    <img src="{{ Storage::url($post->image ? $post->image->path : "not image") }}" alt="">
+
+    <!-- <span>{{ $post->image ? $post->image->path : "pas d'image" }}</span> -->
     <hr>
     <!-- foreach qui va les commentaires qui sont lie au poste grace a la foreign key/ Si c'est vide on utilise un forelse -->
     @forelse($post->comments as $comment)
@@ -16,6 +19,13 @@
 
     @empty
         <span>Aucun commentaire pour ce poste</span>
+    @endforelse
+    <hr>
+    @forelse($post->tags as $tag)
+        <span>{{ $tag->name }}</span>
+
+    @empty
+        <span>Aucun tag pour ce poste</span>
     @endforelse
 
 @endsection
